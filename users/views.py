@@ -30,3 +30,5 @@ def search(request):
             result_profile = Profile.objects.get(user=User.objects.get(username=query))
             result_profile_serializer = ResultProfileSerializer(result_profile)
             return Response(result_profile_serializer.data)
+        else:
+            return Response({"result": "user not found"})
