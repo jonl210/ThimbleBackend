@@ -32,13 +32,13 @@ def search(request):
         result_profile = Profile.objects.get(user=result_user)
         result_profile_serializer = ResultProfileSerializer(result_profile)
 
-        if Notification.objects.filter(recipient=result_user, verb="friend request").exists():
+        if Notification.objects.filter(actor_object_id=searcher_profile.id, recipient=result_user, verb="friend request").exists():
             return Response({"status": "pending", "result": result_profile_serializer.data})
         elif searcher_profile.friends.all().filter(user=result_profile.user).exists():
             return Response({"status": "friends", "result": result_profile_serializer.data})
         elif searcher_profile == result_profile:
             return Response({"status": "you", "result": result_profile_serializer.data})
-            
+
         return Response(result_profile_serializer.data)
     else:
         return Response({"result": "user not found"})
