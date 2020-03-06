@@ -9,6 +9,8 @@ from rest_framework import status
 from .serializers import CreateUserSerializer, ResultProfileSerializer
 from .models import Profile
 
+from notifications.models import Notification
+
 #Register a new user
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -20,14 +22,23 @@ def register_user(request):
     else:
         return Response(user_serializer.errors)
 
-
 #Search for users
 @api_view(['GET'])
 def search(request):
     query = request.query_params["search_query"]
     if User.objects.filter(username=query).exists():
-        result_profile = Profile.objects.get(user=User.objects.get(username=query))
+        result_user = User.objects.get(username=query)
+        searcher_profile = Profile.objects.get(user=request.user)
+        result_profile = Profile.objects.get(user=result_user)
         result_profile_serializer = ResultProfileSerializer(result_profile)
+
+        if Notification.objects.filter(recipient=result_user, verb="friend request").exists():
+            return Response({"status": "pending", "result": result_profile_serializer.data})
+        elif searcher_profile.friends.all().filter(user=result_profile.user).exists():
+            return Response({"status": "friends", "result": result_profile_serializer.data})
+        elif searcher_profile == result_profile:
+            return Response({"status": "you", "result": result_profile_serializer.data})
+            
         return Response(result_profile_serializer.data)
     else:
         return Response({"result": "user not found"})
