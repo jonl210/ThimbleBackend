@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from .models import Profile
 
-# Create new user and validate data
+#Create new user and validate data
 class CreateUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=6)
     username = serializers.CharField(max_length=50)

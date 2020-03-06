@@ -13,22 +13,21 @@ from .models import Profile
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
-    if request.method == "POST":
-        user_serializer = CreateUserSerializer(data=request.data)
-        if user_serializer.is_valid():
-            user_serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(user_serializer.errors)
+    user_serializer = CreateUserSerializer(data=request.data)
+    if user_serializer.is_valid():
+        user_serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
+    else:
+        return Response(user_serializer.errors)
+
 
 #Search for users
 @api_view(['GET'])
 def search(request):
-    if request.method == "GET":
-        query = request.query_params["search_query"]
-        if User.objects.filter(username=query).exists():
-            result_profile = Profile.objects.get(user=User.objects.get(username=query))
-            result_profile_serializer = ResultProfileSerializer(result_profile)
-            return Response(result_profile_serializer.data)
-        else:
-            return Response({"result": "user not found"})
+    query = request.query_params["search_query"]
+    if User.objects.filter(username=query).exists():
+        result_profile = Profile.objects.get(user=User.objects.get(username=query))
+        result_profile_serializer = ResultProfileSerializer(result_profile)
+        return Response(result_profile_serializer.data)
+    else:
+        return Response({"result": "user not found"})
