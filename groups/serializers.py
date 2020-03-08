@@ -15,3 +15,22 @@ class CreateGroupSerializer(serializers.ModelSerializer):
         u_id = Group().generate_group_id()
         group = Group.objects.create(name=name, u_id=u_id, creator=validated_data["creator"])
         return group
+
+#Field to return username from creator field
+class CreatorField(serializers.Field):
+    def to_representation(self, value):
+        return value.user.username
+
+#Field to return member field count
+class MemberCountField(serializers.Field):
+    def to_representation(self, value):
+        return value.all().count()
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    creator = CreatorField()
+    members = MemberCountField()
+
+    class Meta:
+        model = Group
+        fields = ['name', 'u_id', 'creator', 'banner', 'members']

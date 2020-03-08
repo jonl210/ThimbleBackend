@@ -7,6 +7,8 @@ from rest_framework import status
 
 from .serializers import CreateUserSerializer, ResultProfileSerializer
 from .models import Profile
+from groups.models import Group
+from groups.serializers import GroupSerializer
 
 from notifications.models import Notification
 
@@ -41,3 +43,11 @@ def search(request):
         return Response(result_profile_serializer.data)
     else:
         return Response({"result": "user not found"})
+
+#Get groups user has created
+@api_view(['GET'])
+def created_groups(request):
+    profile = Profile.objects.get(user=request.user)
+    groups = profile.groups.all()
+    groups_serializer = GroupSerializer(groups, many=True)
+    return Response(groups_serializer.data)

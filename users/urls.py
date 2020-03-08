@@ -9,4 +9,5 @@ urlpatterns = [
     path('search/', views.search),
     path('token', rest_views.obtain_auth_token),
     path('', views.register_user),
+    path('groups/created', views.created_groups),
 ]
