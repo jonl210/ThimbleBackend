@@ -25,3 +25,11 @@ def add_friend_to_group(request, u_id, username):
     group = Group.objects.get(u_id=u_id)
     group.members.add(friend_profile)
     return Response(status=status.HTTP_200_OK)
+
+#Remove friend from specific group
+@api_view(['PUT'])
+def remove_friend_from_group(request, u_id, username):
+    friend_profile = Profile.objects.get(user=User.objects.get(username=username))
+    group = Group.objects.get(u_id=u_id)
+    group.members.remove(friend_profile)
+    return Response(status=status.HTTP_200_OK)
