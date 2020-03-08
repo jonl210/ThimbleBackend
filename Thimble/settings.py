@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'notifications',
     'alerts.apps.AlertsConfig',
+    'groups.apps.GroupsConfig',
 ]
 
 MIDDLEWARE = [
