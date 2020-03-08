@@ -26,7 +26,6 @@ class MemberCountField(serializers.Field):
     def to_representation(self, value):
         return value.all().count()
 
-
 class GroupSerializer(serializers.ModelSerializer):
     creator = CreatorField()
     members = MemberCountField()
