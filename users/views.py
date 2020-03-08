@@ -51,3 +51,11 @@ def created_groups(request):
     groups = profile.groups.all()
     groups_serializer = GroupSerializer(groups, many=True)
     return Response(groups_serializer.data)
+
+#Get groups user has joined
+@api_view(['GET'])
+def joined_groups(request):
+    profile = Profile.objects.get(user=request.user)
+    groups = profile.joined_groups.all()
+    groups_serializer = GroupSerializer(groups, many=True)
+    return Response(groups_serializer.data)
