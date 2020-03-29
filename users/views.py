@@ -44,18 +44,15 @@ def search(request):
     else:
         return Response({"result": "user not found"})
 
-#Get groups user has created
+#Get groups based on type
 @api_view(['GET'])
-def created_groups(request):
+def groups(request, group_type):
     profile = Profile.objects.get(user=request.user)
-    groups = profile.groups.all()
-    groups_serializer = GroupSerializer(groups, many=True)
-    return Response(groups_serializer.data)
+    groups = 0
+    if group_type == "created":
+        groups = profile.groups.all()
+    elif group_type == "joined":
+        groups = profile.joined_groups.all()
 
-#Get groups user has joined
-@api_view(['GET'])
-def joined_groups(request):
-    profile = Profile.objects.get(user=request.user)
-    groups = profile.joined_groups.all()
     groups_serializer = GroupSerializer(groups, many=True)
     return Response(groups_serializer.data)

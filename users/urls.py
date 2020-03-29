@@ -9,6 +9,5 @@ urlpatterns = [
     path('search/', views.search),
     path('token', rest_views.obtain_auth_token),
     path('', views.register_user),
-    path('groups/created', views.created_groups),
-    path('groups/joined', views.joined_groups),
+    path('groups/<group_type>', views.groups),
 ]
