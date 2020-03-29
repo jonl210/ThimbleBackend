@@ -18,18 +18,15 @@ def create_group(request):
     else:
         return Response(group_serializer.errors)
 
-#Add friend to specific group
+#Add or remove profile from group
 @api_view(['PUT'])
-def add_friend_to_group(request, u_id, username):
-    friend_profile = Profile.objects.get(user=User.objects.get(username=username))
+def edit_group_members(request, u_id, action, username):
+    member_profile = Profile.objects.get(user=User.objects.get(username=username))
     group = Group.objects.get(u_id=u_id)
-    group.members.add(friend_profile)
-    return Response(status=status.HTTP_200_OK)
 
-#Remove friend from specific group
-@api_view(['PUT'])
-def remove_friend_from_group(request, u_id, username):
-    friend_profile = Profile.objects.get(user=User.objects.get(username=username))
-    group = Group.objects.get(u_id=u_id)
-    group.members.remove(friend_profile)
+    if action == "add":
+        group.members.add(member_profile)
+    elif action == "remove":
+        group.members.remove(member_profile)
+
     return Response(status=status.HTTP_200_OK)
