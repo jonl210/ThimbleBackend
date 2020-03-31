@@ -26,19 +26,14 @@ def send_friend_request(request, username):
     notify.send(sender=from_profile, recipient=to_user, verb="friend request")
     return Response(status=status.HTTP_201_CREATED)
 
-#Accept friend request
-@api_view(['PUT'])
-def accept_friend_request(request, username):
+#Delete friend request after adding friend or not
+@api_view(['PUT', 'DELETE'])
+def edit_friend_request(request, username):
     from_profile = Profile.objects.get(user=User.objects.get(username=username))
     to_profile = Profile.objects.get(user=request.user)
-    to_profile.friends.add(from_profile)
-    Notification.objects.get(actor_object_id=from_profile.id, recipient=to_profile.user, verb="friend request").delete()
-    return Response(status=status.HTTP_200_OK)
 
-#Delete friend request
-@api_view(['PUT'])
-def delete_friend_request(request, username):
-    from_profile = Profile.objects.get(user=User.objects.get(username=username))
-    to_profile = Profile.objects.get(user=request.user)
+    if request.method == "PUT":
+        to_profile.friends.add(from_profile)
+
     Notification.objects.get(actor_object_id=from_profile.id, recipient=to_profile.user, verb="friend request").delete()
     return Response(status=status.HTTP_200_OK)
