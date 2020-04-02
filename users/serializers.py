@@ -12,7 +12,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'first_name', 'last_name']
+        fields = ['email', 'username', 'password']
 
     #Check if username is taken
     def validate_username(self, value):
@@ -31,9 +31,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
     #Create new user, profile and auth token
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        Profile.objects.create(user=user)
+        new_profile = Profile.objects.create(user=user)
         Token.objects.create(user=user)
-        return user
+        return new_profile
 
 #Serializers for searching
 class ResultUserSerializer(serializers.ModelSerializer):

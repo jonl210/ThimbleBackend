@@ -18,7 +18,12 @@ from notifications.models import Notification
 def register_user(request):
     user_serializer = CreateUserSerializer(data=request.data)
     if user_serializer.is_valid():
-        user_serializer.save()
+        new_user_profile = user_serializer.save()
+
+        #Check if full name was provided
+        if request.data.get("full_name", None) != None:
+            new_user_profile.full_name = request.data["full_name"]
+            new_user_profile.save()
         return Response(status=status.HTTP_201_CREATED)
     else:
         return Response(user_serializer.errors)
