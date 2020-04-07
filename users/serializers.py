@@ -39,11 +39,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class ResultUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name']
+        fields = ['username']
 
 class ResultProfileSerializer(serializers.ModelSerializer):
     user = ResultUserSerializer()
 
     class Meta:
         model = Profile
-        fields = ['user', 'profile_picture']
+        fields = ['user', 'profile_picture', 'full_name']

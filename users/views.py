@@ -17,7 +17,7 @@ from notifications.models import Notification
 @permission_classes([AllowAny])
 def register_user(request):
     user_serializer = CreateUserSerializer(data=request.data)
-    if user_serializer.is_valid():
+    if user_serializer.is_valid(raise_exception=True):
         new_user_profile = user_serializer.save()
 
         #Check if full name was provided
