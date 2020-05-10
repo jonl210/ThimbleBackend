@@ -32,22 +32,25 @@ def register_user(request):
 @api_view(['GET'])
 def search(request):
     query = request.query_params["search_query"]
-    if User.objects.filter(username=query).exists():
-        result_user = User.objects.get(username=query)
-        searcher_profile = Profile.objects.get(user=request.user)
-        result_profile = Profile.objects.get(user=result_user)
-        result_profile_serializer = ResultProfileSerializer(result_profile)
+    results = User.objects.filter(username__icontains=query)
+    searcher_profile = Profile.objects.get(user=request.user)
+    result_profiles = []
+    if results.count() != 0:
+        for result in results:
+            result_user = User.objects.get(username=result)
+            result_user_profile = Profile.objects.get(user=result_user)
 
-        if Notification.objects.filter(actor_object_id=searcher_profile.id, recipient=result_user, verb="friend request").exists():
-            return Response({"status": "pending", "result": result_profile_serializer.data})
-        elif searcher_profile.friends.all().filter(user=result_profile.user).exists():
-            return Response({"status": "friends", "result": result_profile_serializer.data})
-        elif searcher_profile == result_profile:
-            return Response({"status": "you", "result": result_profile_serializer.data})
-
-        return Response(result_profile_serializer.data)
+            if Notification.objects.filter(actor_object_id=searcher_profile.id, recipient=result_user, verb="friend request").exists():
+                result_profiles.append({"status": "pending", "profile": ResultProfileSerializer(result_user_profile).data})
+            elif searcher_profile.friends.all().filter(user=result_user).exists():
+                result_profiles.append({"status": "friends", "profile": ResultProfileSerializer(result_user_profile).data})
+            elif searcher_profile == result_user_profile:
+                result_profiles.append({"status": "you", "profile": ResultProfileSerializer(result_user_profile).data})
+            else:
+                result_profiles.append({"profile": ResultProfileSerializer(result_user_profile).data})
+        return Response(result_profiles)
     else:
-        return Response({"result": "user not found"})
+        return Response({"status": "No results found"})
 
 #Get groups based on type
 @api_view(['GET'])
