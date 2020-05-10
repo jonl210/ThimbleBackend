@@ -30,8 +30,8 @@ def register_user(request):
 
 #Search for users
 @api_view(['GET'])
-def search(request):
-    query = request.query_params["search_query"]
+def search(request, search_query):
+    query = search_query
     results = User.objects.filter(username__icontains=query)
     searcher_profile = Profile.objects.get(user=request.user)
     result_profiles = []
