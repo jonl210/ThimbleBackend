@@ -26,10 +26,16 @@ class MemberCountField(serializers.Field):
     def to_representation(self, value):
         return value.all().count()
 
+#Format date
+class DateField(serializers.Field):
+    def to_representation(self, value):
+        return value.strftime("%b %-d, %Y")
+
 class GroupSerializer(serializers.ModelSerializer):
     creator = CreatorField()
     members = MemberCountField()
+    date = DateField()
 
     class Meta:
         model = Group
-        fields = ['name', 'u_id', 'creator', 'banner', 'members']
+        fields = ['name', 'u_id', 'creator', 'date', 'banner', 'members']
