@@ -19,7 +19,8 @@ class CreateGroupSerializer(serializers.ModelSerializer):
 #Field to return username from creator field
 class CreatorField(serializers.Field):
     def to_representation(self, value):
-        return value.user.username
+        #return value.user.username
+        return (value.user.username, value.profile_picture)
 
 #Field to return member field count
 class MemberCountField(serializers.Field):
