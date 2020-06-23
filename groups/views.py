@@ -7,6 +7,7 @@ from rest_framework import status
 from .models import Group
 from users.models import Profile
 from .serializers import CreateGroupSerializer
+from users.serializers import BasicProfileSerializer
 
 #Create a new group
 @api_view(['POST'])
@@ -30,3 +31,11 @@ def edit_group_members(request, u_id, action, username):
         group.members.remove(member_profile)
 
     return Response(status=status.HTTP_200_OK)
+
+#Return members in a group
+@api_view(['GET'])
+def members(request, u_id):
+    group = Group.objects.get(u_id=u_id)
+    members = group.members.all()
+    members_serializer = BasicProfileSerializer(members, many=True)
+    return Response(members_serializer.data)

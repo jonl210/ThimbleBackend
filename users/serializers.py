@@ -36,14 +36,21 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return new_profile
 
 #Serializers for searching
-class ResultUserSerializer(serializers.ModelSerializer):
+class UsernameForUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username']
 
 class ResultProfileSerializer(serializers.ModelSerializer):
-    user = ResultUserSerializer()
+    user = UsernameForUserSerializer()
 
     class Meta:
         model = Profile
         fields = ['user', 'profile_picture', 'full_name']
+
+class BasicProfileSerializer(serializers.ModelSerializer):
+    user = UsernameForUserSerializer()
+
+    class Meta:
+        model = Profile
+        fields = ['user', 'profile_picture']
