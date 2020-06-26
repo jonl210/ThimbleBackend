@@ -9,6 +9,9 @@ from users.models import Profile
 from .serializers import CreateGroupSerializer
 from users.serializers import BasicProfileSerializer
 
+from notifications.signals import notify
+from notifications.models import Notification
+
 #Create a new group
 @api_view(['POST'])
 def create_group(request):
@@ -27,6 +30,12 @@ def edit_group_members(request, u_id, action, username):
 
     if action == "add":
         group.members.add(member_profile)
+        from_profile = Profile.objects.get(user=request.user)
+        verb = "added you to the group {}".format(group.name)
+
+        #Check if notification already exists
+        if not Notification.objects.filter(actor_object_id=from_profile.id, recipient=member_profile.user, verb=verb).exists():
+            notify.send(sender=from_profile, recipient=member_profile.user, verb=verb)
     elif action == "remove":
         group.members.remove(member_profile)
 
