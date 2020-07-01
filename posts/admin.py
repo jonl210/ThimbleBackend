@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Media, PhotoPost
+from .models import Post, PhotoMedia, LinkMedia
 
-admin.site.register(Media)
-admin.site.register(PhotoPost)
+admin.site.register(Post)
+admin.site.register(PhotoMedia)
+admin.site.register(LinkMedia)
