@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.1.11']
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
+
 
 # Application definition
 

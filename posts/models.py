@@ -24,3 +24,16 @@ class Post(models.Model):
     post_type = models.IntegerField(PostType.choices)
     photo = models.OneToOneField(PhotoMedia, on_delete=models.CASCADE, blank=True, null=True)
     link = models.OneToOneField(LinkMedia, on_delete=models.CASCADE, blank=True, null=True)
+
+    def generate_post_id(self):
+        unique = False
+        random_id = 0
+
+        #Check if id already exists
+        while not unique:
+            random_id = ''.join([random.choice(string.ascii_letters +string.digits) for n in range(20)])
+            if Post.objects.filter(u_id=random_id).exists():
+                unique = False
+            else:
+                unique = True
+            return random_id
