@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from .models import Group
-from users.models import Profile
 
 #Create new group and validate name
 class CreateGroupSerializer(serializers.ModelSerializer):
@@ -38,4 +37,4 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['name', 'u_id', 'creator', 'date', 'banner', 'members']
+        fields = '__all__'
