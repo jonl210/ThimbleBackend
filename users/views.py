@@ -12,7 +12,7 @@ from groups.serializers import GroupSerializer
 
 from notifications.models import Notification
 
-#Register a new user
+# Register a new user
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
@@ -20,7 +20,7 @@ def register_user(request):
     if user_serializer.is_valid(raise_exception=True):
         new_user_profile = user_serializer.save()
 
-        #Check if full name was provided
+        # Check if full name was provided
         if request.data.get("full_name", None) != None:
             new_user_profile.full_name = request.data["full_name"]
             new_user_profile.save()
@@ -28,7 +28,7 @@ def register_user(request):
     else:
         return Response(user_serializer.errors)
 
-#Search for users
+# Search for users
 @api_view(['GET'])
 def search(request, search_query):
     query = search_query
@@ -52,7 +52,7 @@ def search(request, search_query):
     else:
         return Response({"status": "No results found"})
 
-#Get groups based on type
+# Get groups based on type
 @api_view(['GET'])
 def groups(request, group_type):
     profile = Profile.objects.get(user=request.user)

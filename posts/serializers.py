@@ -12,10 +12,20 @@ class LinkMediaSerializer(serializers.ModelSerializer):
         model = LinkMedia
         fields = '__all__'
 
+class CreatorProfileField(serializers.Field):
+    def to_representation(self, value):
+        return (value.user.username, value.profile_picture)
+
+class DateField(serializers.Field):
+    def to_representation(self, value):
+        return value.strftime("%b %-d, %Y")
+
 class PostSerializer(serializers.ModelSerializer):
     photo = PhotoMediaSerializer()
     link = LinkMediaSerializer()
+    profile = CreatorProfileField()
+    date = DateField()
 
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = ['id', 'group']

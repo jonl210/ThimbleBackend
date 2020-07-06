@@ -16,7 +16,7 @@ class Group(models.Model):
         unique = False
         random_id = 0
 
-        #Check if id already exists
+        # Check if id already exists
         while not unique:
             random_id = ''.join([random.choice(string.ascii_letters+string.digits) for n in range(10)])
             if Group.objects.filter(u_id=random_id).exists():
