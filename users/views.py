@@ -5,12 +5,18 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import CreateUserSerializer, ResultProfileSerializer
+from .serializers import CreateUserSerializer, ResultProfileSerializer, ProfileTabSerializer
 from .models import Profile
 from groups.models import Group
 from groups.serializers import GroupSerializer
+from posts.models import Post
 
 from notifications.models import Notification
+
+from google.cloud import storage
+
+storage_client = storage.Client()
+media_bucket = storage_client.get_bucket("thimble-media-store")
 
 # Register a new user
 @api_view(['POST'])
@@ -64,3 +70,26 @@ def groups(request, group_type):
 
     groups_serializer = GroupSerializer(groups, many=True)
     return Response(groups_serializer.data)
+
+# Return info for user profile
+@api_view(['GET'])
+def profile(request):
+    profile = Profile.objects.get(user=request.user)
+    profile_serializer = ProfileTabSerializer(profile)
+    return Response(profile_serializer.data)
+
+@api_view(['POST'])
+def update_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    if request.data["photo"] != None:
+        photo_u_id = Post().generate_post_id()
+        photo_url = upload_profile_photo(request.data["photo"], photo_u_id)
+        profile.profile_picture = photo_url
+        profile.save()
+        return Response(status=status.HTTP_200_OK)
+
+def upload_profile_photo(photo, u_id):
+    blob = media_bucket.blob(u_id)
+    blob.upload_from_file(photo, content_type="image/jpeg")
+    blob.make_public()
+    return blob.public_url

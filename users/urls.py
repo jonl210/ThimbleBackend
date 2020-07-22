@@ -10,4 +10,6 @@ urlpatterns = [
     path('token', rest_views.obtain_auth_token),
     path('', views.register_user),
     path('groups/<group_type>', views.groups),
+    path('profile', views.profile),
+    path('profile/update', views.update_profile),
 ]

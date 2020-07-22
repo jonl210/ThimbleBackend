@@ -35,7 +35,17 @@ class CreateUserSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return new_profile
 
-# Serializers for searching
+class UsernameField(serializers.Field):
+    def to_representation(self, value):
+        return value.username
+
+class ProfileTabSerializer(serializers.ModelSerializer):
+    user = UsernameField()
+
+    class Meta:
+        model = Profile
+        fields = ['user', 'profile_picture', 'full_name']
+
 class UsernameForUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
