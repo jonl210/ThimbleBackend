@@ -10,6 +10,7 @@ from .models import Profile
 from groups.models import Group
 from groups.serializers import GroupSerializer
 from posts.models import Post
+from posts.serializers import PostSerializer
 
 from notifications.models import Notification
 
@@ -78,6 +79,7 @@ def profile(request):
     profile_serializer = ProfileTabSerializer(profile)
     return Response(profile_serializer.data)
 
+# Update profile info
 @api_view(['POST'])
 def update_profile(request):
     profile = Profile.objects.get(user=request.user)
@@ -93,3 +95,19 @@ def upload_profile_photo(photo, u_id):
     blob.upload_from_file(photo, content_type="image/jpeg")
     blob.make_public()
     return blob.public_url
+
+# Return all users posts
+@api_view(['GET'])
+def posts(request):
+    profile = Profile.objects.get(user=request.user)
+    posts = profile.my_posts.all()
+    posts_serializer = PostSerializer(posts, many=True)
+    return Response(posts_serializer.data)
+
+# Return all users friends
+@api_view(['GET'])
+def friends(request):
+    profile = Profile.objects.get(user=request.user)
+    friends = profile.friends.all()
+    friends_serializer = ResultProfileSerializer(friends, many=True)
+    return Response(friends_serializer.data)
