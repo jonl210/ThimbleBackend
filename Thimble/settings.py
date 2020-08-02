@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'alerts.apps.AlertsConfig',
     'groups.apps.GroupsConfig',
     'posts.apps.PostsConfig',
+    'likes.apps.LikesConfig',
 ]
 
 MIDDLEWARE = [

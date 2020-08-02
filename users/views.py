@@ -11,6 +11,7 @@ from groups.models import Group
 from groups.serializers import GroupSerializer
 from posts.models import Post
 from posts.serializers import PostSerializer
+from likes.models import Like
 
 from notifications.models import Notification
 
@@ -100,9 +101,14 @@ def upload_profile_photo(photo, u_id):
 @api_view(['GET'])
 def posts(request):
     profile = Profile.objects.get(user=request.user)
-    posts = profile.my_posts.all()
-    posts_serializer = PostSerializer(posts, many=True)
-    return Response(posts_serializer.data)
+    profile_posts = profile.my_posts.all()
+    posts = []
+    for post in profile_posts:
+        if Like.objects.filter(post=post, profile=profile).exists():
+            posts.append({"post": PostSerializer(post).data, "is_liked": "true"})
+        else:
+            posts.append({"post": PostSerializer(post).data, "is_liked": "false"})
+    return Response(posts)
 
 # Return all users friends
 @api_view(['GET'])

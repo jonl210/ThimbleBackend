@@ -10,6 +10,7 @@ from .serializers import CreateGroupSerializer
 from users.serializers import BasicProfileSerializer
 from posts.models import Post
 from posts.serializers import PostSerializer
+from likes.models import Like
 
 from notifications.signals import notify
 from notifications.models import Notification
@@ -71,6 +72,12 @@ def non_member_friends(request, u_id):
 @api_view(['GET'])
 def posts(request, u_id):
     group = Group.objects.get(u_id=u_id)
-    posts = group.group_posts.all().order_by("-date")
-    posts_serializer = PostSerializer(posts, many=True)
-    return Response(posts_serializer.data)
+    group_posts = group.group_posts.all().order_by("-date")
+    profile = Profile.objects.get(user=request.user)
+    posts = []
+    for post in group_posts:
+        if Like.objects.filter(post=post, profile=profile).exists():
+            posts.append({"post": PostSerializer(post).data, "is_liked": "true"})
+        else:
+            posts.append({"post": PostSerializer(post).data, "is_liked": "false"})
+    return Response(posts)

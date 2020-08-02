@@ -6,6 +6,7 @@ from .serializers import PostSerializer
 from .models import Post, PhotoMedia
 from groups.models import Group
 from users.models import Profile
+from likes.models import Like
 
 from google.cloud import storage
 
@@ -27,3 +28,23 @@ def upload_photo(photo, u_id):
     blob.upload_from_file(photo, content_type="image/jpeg")
     blob.make_public()
     return blob.public_url
+
+@api_view(['POST'])
+def like_post(request, u_id):
+    profile = Profile.objects.get(user=request.user)
+    post = Post.objects.get(u_id=u_id)
+    if not Like.objects.filter(post=post, profile=profile).exists():
+        Like.objects.create(post=post, profile=profile)
+        return Response(status=status.HTTP_201_CREATED)
+    else:
+        return Response(status=status.HTTP_409_CONFLICT)
+
+@api_view(['DELETE'])
+def unlike_post(request, u_id):
+    profile = Profile.objects.get(user=request.user)
+    post = Post.objects.get(u_id=u_id)
+    if Like.objects.filter(post=post, profile=profile).exists():
+        Like.objects.get(post=post, profile=profile).delete()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
