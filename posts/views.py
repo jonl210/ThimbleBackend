@@ -10,6 +10,8 @@ from likes.models import Like
 
 from google.cloud import storage
 
+from django_mysql.models import ListF
+
 storage_client = storage.Client()
 media_bucket = storage_client.get_bucket("thimble-media-store")
 
@@ -21,6 +23,8 @@ def create_photo_post(request):
     photo_url = upload_photo(request.data["photo"], post_u_id)
     photo_media_object = PhotoMedia.objects.create(url=photo_url, caption=request.data["caption"])
     Post.objects.create(profile=profile, group=group, u_id=post_u_id, post_type=0, photo=photo_media_object)
+    group_members = group.members.all()
+    deliver_post_id(post_u_id, group_members)
     return Response(status=status.HTTP_201_CREATED)
 
 def upload_photo(photo, u_id):
@@ -28,6 +32,10 @@ def upload_photo(photo, u_id):
     blob.upload_from_file(photo, content_type="image/jpeg")
     blob.make_public()
     return blob.public_url
+
+def deliver_post_id(post_id, group_members):
+    for member in group_members:
+        Profile.objects.filter(user=member.user).update(feed=ListF('feed').appendleft(post_id))
 
 @api_view(['POST'])
 def like_post(request, u_id):

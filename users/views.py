@@ -68,7 +68,7 @@ def groups(request, group_type):
     if group_type == "created":
         groups = profile.groups.all()
     elif group_type == "joined":
-        groups = profile.joined_groups.all()
+        groups = profile.joined_groups.all().exclude(creator=profile)
 
     groups_serializer = GroupSerializer(groups, many=True)
     return Response(groups_serializer.data)
@@ -117,3 +117,17 @@ def friends(request):
     friends = profile.friends.all()
     friends_serializer = ResultProfileSerializer(friends, many=True)
     return Response(friends_serializer.data)
+
+# Return posts in feed
+@api_view(['GET'])
+def feed(request):
+    profile = Profile.objects.get(user=request.user)
+    feed_length = len(profile.feed)
+    posts = []
+    for count in range(feed_length):
+        post = Post.objects.get(u_id=profile.feed[count])
+        if Like.objects.filter(post=post, profile=profile).exists():
+            posts.append({"post": PostSerializer(post).data, "is_liked": "true"})
+        else:
+            posts.append({"post": PostSerializer(post).data, "is_liked": "false"})
+    return Response(posts)

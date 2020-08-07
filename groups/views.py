@@ -20,7 +20,10 @@ from notifications.models import Notification
 def create_group(request):
     group_serializer = CreateGroupSerializer(data=request.data)
     if group_serializer.is_valid():
-        group_serializer.save(creator=Profile.objects.get(user=request.user))
+        group = group_serializer.save(creator=Profile.objects.get(user=request.user))
+
+        # Add creator as a member
+        group.members.add(Profile.objects.get(user=request.user))
         return Response(status=status.HTTP_201_CREATED)
     else:
         return Response(group_serializer.errors)
@@ -48,7 +51,7 @@ def edit_group_members(request, u_id, action, username):
 @api_view(['GET'])
 def members(request, u_id):
     group = Group.objects.get(u_id=u_id)
-    members = group.members.all()
+    members = group.members.all().exclude(user=group.creator.user)
     members_serializer = BasicProfileSerializer(members, many=True)
     return Response(members_serializer.data)
 

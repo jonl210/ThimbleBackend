@@ -14,4 +14,5 @@ urlpatterns = [
     path('profile/update', views.update_profile),
     path('posts', views.posts),
     path('friends', views.friends),
+    path('feed', views.feed),
 ]
