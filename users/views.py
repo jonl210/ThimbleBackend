@@ -122,7 +122,9 @@ def friends(request):
 @api_view(['GET'])
 def feed(request):
     profile = Profile.objects.get(user=request.user)
-    feed_length = len(profile.feed)
+    feed_length = 0
+    if profile.feed != None:
+        feed_length = len(profile.feed)
     posts = []
     for count in range(feed_length):
         post = Post.objects.get(u_id=profile.feed[count])
