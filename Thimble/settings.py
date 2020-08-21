@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG_SETTING')
 
-ALLOWED_HOSTS = ['192.168.1.11']
+ALLOWED_HOSTS = ['192.168.1.11', 'prod-env.eba-ubkcz2pd.us-west-2.elasticbeanstalk.com']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
