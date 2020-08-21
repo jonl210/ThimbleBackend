@@ -24,7 +24,6 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG_SETTING']
-print(os.environ['DEBUG_SETTING'])
 
 ALLOWED_HOSTS = ['192.168.1.11', 'prod-env.eba-ubkcz2pd.us-west-2.elasticbeanstalk.com']
 
