@@ -28,7 +28,7 @@ if 'RDS_HOSTNAME' in os.environ:
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.11', 'prod-env.eba-s9pu8dmw.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['192.168.1.11']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
