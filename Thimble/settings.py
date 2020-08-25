@@ -25,7 +25,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.11', 'prod-env2.eba-w323tgc5.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['192.168.1.11', 'thimbleapp.co']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
