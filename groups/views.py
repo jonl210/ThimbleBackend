@@ -79,8 +79,9 @@ def posts(request, u_id):
     profile = Profile.objects.get(user=request.user)
     posts = []
     for post in group_posts:
+        like_count = post.post_likes.count()
         if Like.objects.filter(post=post, profile=profile).exists():
-            posts.append({"post": PostSerializer(post).data, "is_liked": "true"})
+            posts.append({"post": PostSerializer(post).data, "is_liked": "true", "like_count": like_count})
         else:
-            posts.append({"post": PostSerializer(post).data, "is_liked": "false"})
+            posts.append({"post": PostSerializer(post).data, "is_liked": "false", "like_count": like_count})
     return Response(posts)
