@@ -101,7 +101,7 @@ def upload_profile_photo(photo, u_id):
 @api_view(['GET'])
 def posts(request):
     profile = Profile.objects.get(user=request.user)
-    profile_posts = profile.my_posts.all()
+    profile_posts = profile.my_posts.all().order_by("-date")
     posts = []
     for post in profile_posts:
         like_count = post.post_likes.count()
