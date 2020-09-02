@@ -12,8 +12,10 @@ from google.cloud import storage
 
 from django_mysql.models import ListF
 
+import os
+
 storage_client = storage.Client()
-media_bucket = storage_client.get_bucket("thimble-media-store")
+media_bucket = storage_client.get_bucket(os.environ["MEDIA_BUCKET"])
 
 @api_view(['POST'])
 def create_photo_post(request):

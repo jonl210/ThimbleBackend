@@ -17,8 +17,10 @@ from notifications.models import Notification
 
 from google.cloud import storage
 
+import os
+
 storage_client = storage.Client()
-media_bucket = storage_client.get_bucket("thimble-media-store")
+media_bucket = storage_client.get_bucket(os.environ["MEDIA_BUCKET"])
 
 # Register a new user
 @api_view(['POST'])
