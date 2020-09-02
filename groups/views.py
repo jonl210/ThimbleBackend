@@ -7,7 +7,7 @@ from rest_framework import status
 from .models import Group
 from users.models import Profile
 from .serializers import CreateGroupSerializer
-from users.serializers import BasicProfileSerializer
+from users.serializers import BasicProfileSerializer, ResultProfileSerializer
 from posts.models import Post
 from posts.serializers import PostSerializer
 from likes.models import Like
@@ -85,3 +85,11 @@ def posts(request, u_id):
         else:
             posts.append({"post": PostSerializer(post).data, "is_liked": "false", "like_count": like_count})
     return Response(posts)
+
+# Return current members in a group
+@api_view(['GET'])
+def current_members(request, u_id):
+    group = Group.objects.get(u_id=u_id)
+    members = group.members.all()
+    members_serializer = ResultProfileSerializer(members, many=True)
+    return Response(members_serializer.data)
