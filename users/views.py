@@ -19,6 +19,8 @@ from google.cloud import storage
 
 import os
 
+from . import UsersHelper
+
 storage_client = storage.Client()
 media_bucket = storage_client.get_bucket(os.environ["MEDIA_BUCKET"])
 
@@ -106,11 +108,7 @@ def posts(request):
     profile_posts = profile.my_posts.all().order_by("-date")
     posts = []
     for post in profile_posts:
-        like_count = post.post_likes.count()
-        if Like.objects.filter(post=post, profile=profile).exists():
-            posts.append({"post": PostSerializer(post).data, "is_liked": "true", "like_count": like_count})
-        else:
-            posts.append({"post": PostSerializer(post).data, "is_liked": "false", "like_count": like_count})
+        posts.append(UsersHelper.set_like_status(post, profile))
     return Response(posts)
 
 # Return all users friends
@@ -131,9 +129,5 @@ def feed(request):
     posts = []
     for count in range(feed_length):
         post = Post.objects.get(u_id=profile.feed[count])
-        like_count = post.post_likes.count()
-        if Like.objects.filter(post=post, profile=profile).exists():
-            posts.append({"post": PostSerializer(post).data, "is_liked": "true", "like_count": like_count})
-        else:
-            posts.append({"post": PostSerializer(post).data, "is_liked": "false", "like_count": like_count})
+        posts.append(UsersHelper.set_like_status(post, profile))
     return Response(posts)
