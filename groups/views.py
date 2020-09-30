@@ -8,9 +8,8 @@ from .models import Group
 from users.models import Profile
 from .serializers import CreateGroupSerializer
 from users.serializers import BasicProfileSerializer, ResultProfileSerializer
-from posts.models import Post
-from posts.serializers import PostSerializer
-from likes.models import Like
+
+from posts import PostsHelper
 
 from notifications.signals import notify
 from notifications.models import Notification
@@ -79,11 +78,8 @@ def posts(request, u_id):
     profile = Profile.objects.get(user=request.user)
     posts = []
     for post in group_posts:
-        like_count = post.post_likes.count()
-        if Like.objects.filter(post=post, profile=profile).exists():
-            posts.append({"post": PostSerializer(post).data, "is_liked": "true", "like_count": like_count})
-        else:
-            posts.append({"post": PostSerializer(post).data, "is_liked": "false", "like_count": like_count})
+        posts.append(PostsHelper.set_like_status(post, profile))
+
     return Response(posts)
 
 # Return current members in a group
