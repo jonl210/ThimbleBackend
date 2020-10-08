@@ -12,17 +12,13 @@ from groups.serializers import GroupSerializer
 from posts.models import Post
 from posts.serializers import PostSerializer
 from likes.models import Like
+from posts import PostsHelper
 
 from notifications.models import Notification
 
 from google.cloud import storage
 
 import os
-
-from posts import PostsHelper
-
-storage_client = storage.Client()
-media_bucket = storage_client.get_bucket(os.environ["MEDIA_BUCKET"])
 
 # Register a new user
 @api_view(['POST'])
@@ -73,7 +69,6 @@ def groups(request, group_type):
         groups = profile.groups.all()
     elif group_type == "joined":
         groups = profile.joined_groups.all().exclude(creator=profile)
-
     groups_serializer = GroupSerializer(groups, many=True)
     return Response(groups_serializer.data)
 
@@ -89,17 +84,11 @@ def profile(request):
 def update_profile(request):
     profile = Profile.objects.get(user=request.user)
     if request.data["photo"] != None:
-        photo_u_id = Post().generate_post_id()
-        photo_url = upload_profile_photo(request.data["photo"], photo_u_id)
+        photo_u_id = Post.generate_post_id()
+        photo_url = PostsHelper.upload_photo(request.data["photo"], photo_u_id)
         profile.profile_picture = photo_url
         profile.save()
         return Response(status=status.HTTP_200_OK)
-
-def upload_profile_photo(photo, u_id):
-    blob = media_bucket.blob(u_id)
-    blob.upload_from_file(photo, content_type="image/jpeg")
-    blob.make_public()
-    return blob.public_url
 
 # Return all users posts
 @api_view(['GET'])
