@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'RDS_HOSTNAME' in os.environ:
+if 'PROD_DB' in os.environ:
     DEBUG = False
 else:
     DEBUG = True
@@ -87,9 +87,8 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASE_URL = os.getenv('DATABASE_URL', None)
 #Prod database
-if DATABASE_URL:
+if os.environ["PROD_DB"]:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -162,6 +161,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
 
 # Django rest framework
 
