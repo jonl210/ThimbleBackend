@@ -92,10 +92,10 @@ if os.environ["PROD_DB"]:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'defaultdb',
+            'NAME': 'thimbledb',
             'USER': 'doadmin',
             'PASSWORD': os.environ['PROD_DB_PASSWORD'],
-            'HOST': 'thimbledb-do-user-8218478-0.a.db.ondigitalocean.com',
+            'HOST': 'thimble-db-storage-do-user-8218478-0.b.db.ondigitalocean.com',
             'PORT': '25060',
             'OPTIONS': {
                 "init_command": "SET foreign_key_checks = 0;",
