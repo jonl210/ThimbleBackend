@@ -87,9 +87,9 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-
+DATABASE_URL = os.getenv('DATABASE_URL', None)
 #Prod database
-if 'DATABASE_URL' in os.environ:
+if DATABASE_URL:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
