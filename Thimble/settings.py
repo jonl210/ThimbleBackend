@@ -89,15 +89,15 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 
 
 #Prod database
-if 'RDS_HOSTNAME' in os.environ:
+if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
+            'NAME': 'defaultdb',
+            'USER': 'doadmin',
+            'PASSWORD': os.environ['PROD_DB_PASSWORD'],
+            'HOST': 'thimbledb-do-user-8218478-0.a.db.ondigitalocean.com',
+            'PORT': '25060',
             'OPTIONS': {
                 "init_command": "SET foreign_key_checks = 0;",
                 'charset': 'utf8mb4',
