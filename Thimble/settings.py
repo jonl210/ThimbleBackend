@@ -28,7 +28,7 @@ if 'RDS_HOSTNAME' in os.environ:
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.3', '192.168.1.11', 'thimbleapp.co', 'prod-env2.eba-w323tgc5.us-west-2.elasticbeanstalk']
+ALLOWED_HOSTS = ['192.168.1.3', '192.168.1.11', 'thimbleapp.co']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
