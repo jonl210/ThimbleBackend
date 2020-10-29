@@ -28,7 +28,7 @@ if 'RDS_HOSTNAME' in os.environ:
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.3', '192.168.1.11', 'thimbleapp.co']
+ALLOWED_HOSTS = ['192.168.1.3', '192.168.1.11', 'thimbleapp.co', '138.197.199.100', 'localhost']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
