@@ -92,8 +92,8 @@ if 'PROD_DB_PASSWORD' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'thimbledb',
-            'USER': 'jonathan',
+            'NAME': 'doadmin',
+            'USER': 'root',
             'PASSWORD': os.environ['PROD_DB_PASSWORD'],
             'HOST': 'thimble-db-storage-do-user-8218478-0.b.db.ondigitalocean.com',
             'PORT': '25060',
