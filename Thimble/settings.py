@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'RDS_HOSTNAME' in os.environ:
+if 'PROD_DB_PASSWORD' in os.environ:
     DEBUG = False
 else:
     DEBUG = True
@@ -88,15 +88,15 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 #Prod database
-if 'RDS_HOSTNAME' in os.environ:
+if 'PROD_DB_PASSWORD' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
+            'NAME': 'thimbledb',
+            'USER': 'jonathan',
+            'PASSWORD': os.environ['PROD_DB_PASSWORD'],
+            'HOST': 'thimble-db-storage-do-user-8218478-0.b.db.ondigitalocean.com',
+            'PORT': '25060',
             'OPTIONS': {
                 "init_command": "SET foreign_key_checks = 0;",
                 'charset': 'utf8mb4',
