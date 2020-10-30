@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 #Prod database
-if os.getenv('PROD_DB_PASSWORD') not None:
+if 'PROD_DB_PASSWORD' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
