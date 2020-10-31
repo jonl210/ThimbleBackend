@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 #Prod database
-# if 'PROD_DB_PASSWORD' in os.environ:
+if 'PROD_DB_PASSWORD' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -106,22 +106,22 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
     }
 
 #Local database
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': os.environ['LOCAL_DB_NAME'],
-#             'USER': 'root',
-#             'PASSWORD': os.environ['LOCAL_DB_PASS'],
-#             'HOST': 'localhost',
-#             'PORT': '3306',
-#             'OPTIONS': {
-#                 "init_command": "SET foreign_key_checks = 0;",
-#                 'charset': 'utf8mb4',
-#                 'connect_timeout': 10,
-#             },
-#       }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['LOCAL_DB_NAME'],
+            'USER': 'root',
+            'PASSWORD': os.environ['LOCAL_DB_PASS'],
+            'HOST': 'localhost',
+            'PORT': '3306',
+            'OPTIONS': {
+                "init_command": "SET foreign_key_checks = 0;",
+                'charset': 'utf8mb4',
+                'connect_timeout': 10,
+            },
+      }
+}
 
 
 # Password validation
