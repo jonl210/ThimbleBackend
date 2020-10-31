@@ -20,15 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'PROD_DB_PASSWORD' in os.environ:
-    DEBUG = False
-else:
-    DEBUG = True
+DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.3', '192.168.1.11', 'thimbleapp.co', '138.197.199.100', 'localhost']
+ALLOWED_HOSTS = ['192.168.1.3', '192.168.1.11', 'thimbleapp.co', '138.197.214.125', 'localhost']
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
@@ -88,7 +85,7 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 #Prod database
-if 'PROD_DB_PASSWORD' in os.environ:
+# if 'PROD_DB_PASSWORD' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -106,22 +103,22 @@ if 'PROD_DB_PASSWORD' in os.environ:
     }
 
 #Local database
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['LOCAL_DB_NAME'],
-            'USER': 'root',
-            'PASSWORD': os.environ['LOCAL_DB_PASS'],
-            'HOST': 'localhost',
-            'PORT': '3306',
-            'OPTIONS': {
-                "init_command": "SET foreign_key_checks = 0;",
-                'charset': 'utf8mb4',
-                'connect_timeout': 10,
-            },
-      }
-}
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': os.environ['LOCAL_DB_NAME'],
+#             'USER': 'root',
+#             'PASSWORD': os.environ['LOCAL_DB_PASS'],
+#             'HOST': 'localhost',
+#             'PORT': '3306',
+#             'OPTIONS': {
+#                 "init_command": "SET foreign_key_checks = 0;",
+#                 'charset': 'utf8mb4',
+#                 'connect_timeout': 10,
+#             },
+#       }
+# }
 
 
 # Password validation
