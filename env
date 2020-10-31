@@ -1,0 +1,5 @@
+SECRET_KEY="4glq%lxz08yz*&qtx2@z8)rja=$zc(#%-^+6@)$@)b2tlc3t(c"
+PROD_DB_PASSWORD="z5sps41j4f13zrla"
+GOOGLE_APPLICATION_CREDENTIALS="/home/jonathan/creds.json"
+MEDIA_BUCKET="thimble-media-store"
+

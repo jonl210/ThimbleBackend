@@ -27,10 +27,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'PROD_DB_PASSWORD' in os.environ:
-    DEBUG=False
-else:
-    DEBUG=True
+#if 'PROD_DB_PASSWORD' in os.environ:
+
+DEBUG=True
 
 ALLOWED_HOSTS = ['192.168.1.3', '192.168.1.11', 'thimbleapp.co', '138.197.214.125', 'localhost']
 
