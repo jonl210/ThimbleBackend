@@ -90,6 +90,7 @@ WSGI_APPLICATION = 'Thimble.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 #Prod database
+<<<<<<< HEAD
 # if 'PROD_DB_PASSWORD' in os.environ:
 DATABASES = {
      'default': {
@@ -106,24 +107,42 @@ DATABASES = {
          },
      }
  }
+=======
+if 'PROD_DB_PASSWORD' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'thimbledb',
+            'USER': 'doadmin',
+            'PASSWORD': os.environ['PROD_DB_PASSWORD'],
+            'HOST': 'thimble-db-storage-do-user-8218478-0.b.db.ondigitalocean.com',
+            'PORT': '25060',
+            'OPTIONS': {
+                "init_command": "SET foreign_key_checks = 0;",
+                'charset': 'utf8mb4',
+                'connect_timeout': 10,
+            },
+        }
+    }
+>>>>>>> ed733ed2c7221f7b2de8ca9a7b52817161126c1c
 
 #Local database
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': os.environ['LOCAL_DB_NAME'],
-#             'USER': 'root',
-#             'PASSWORD': os.environ['LOCAL_DB_PASS'],
-#             'HOST': 'localhost',
-#             'PORT': '3306',
-#             'OPTIONS': {
-#                 "init_command": "SET foreign_key_checks = 0;",
-#                 'charset': 'utf8mb4',
-#                 'connect_timeout': 10,
-#             },
-#       }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['LOCAL_DB_NAME'],
+            'USER': 'root',
+            'PASSWORD': os.environ['LOCAL_DB_PASS'],
+            'HOST': 'localhost',
+            'PORT': '3306',
+            'OPTIONS': {
+                "init_command": "SET foreign_key_checks = 0;",
+                'charset': 'utf8mb4',
+                'connect_timeout': 10,
+            },
+      }
+}
 
 
 # Password validation
