@@ -35,6 +35,14 @@ class CreateUserSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return new_profile
 
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['full_name', 'profile_picture']
+
+    def update_profile(self, validated_data):
+        self.full_name = validated_data['full_name']
+
 class UsernameField(serializers.Field):
     def to_representation(self, value):
         return value.username

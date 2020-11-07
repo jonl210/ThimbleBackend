@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import CreateUserSerializer, ResultProfileSerializer, ProfileTabSerializer
+from .serializers import CreateUserSerializer, ResultProfileSerializer, ProfileTabSerializer, UpdateProfileSerializer
 from .models import Profile
 from groups.models import Group
 from groups.serializers import GroupSerializer
@@ -73,22 +73,27 @@ def groups(request, group_type):
     return Response(groups_serializer.data)
 
 # Return info for user profile
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def profile(request):
     profile = Profile.objects.get(user=request.user)
-    profile_serializer = ProfileTabSerializer(profile)
-    return Response(profile_serializer.data)
+    if request.method == "GET":
+        profile_serializer = ProfileTabSerializer(profile)
+        return Response(profile_serializer.data)
+    elif request.method == "PUT":
+        update_profile_serializer = UpdateProfileSerializer(profile, data=request.data)
+        if update_profile_serializer.is_valid():
+            update_profile_serializer.save()
+            return Response(status=status.HTTP_200_OK)
 
-# Update profile info
+# Called if profile photo was changed
 @api_view(['POST'])
-def update_profile(request):
+def update_profile_photo(request):
     profile = Profile.objects.get(user=request.user)
-    if request.data["photo"] != None:
-        photo_u_id = Post.generate_post_id()
-        photo_url = PostsHelper.upload_photo(request.data["photo"], photo_u_id)
-        profile.profile_picture = photo_url
-        profile.save()
-        return Response(status=status.HTTP_200_OK)
+    photo_u_id = Post.generate_post_id()
+    photo_url = PostsHelper.upload_photo(request.data["photo"], photo_u_id)
+    profile.profile_picture = photo_url
+    profile.save()
+    return Response(status=status.HTTP_200_OK)
 
 # Return all users posts
 @api_view(['GET'])
@@ -120,3 +125,13 @@ def feed(request):
         post = Post.objects.get(u_id=profile.feed[count])
         posts.append(PostsHelper.set_like_status(post, profile))
     return Response(posts)
+
+# Return users likes
+@api_view(['GET'])
+def likes(request):
+    profile = Profile.objects.get(user=request.user)
+    likes = profile.user_likes.all().order_by("-date")
+    liked_posts = []
+    for like in likes:
+        liked_posts.append(PostsHelper.set_like_status(like.post, profile))
+    return Response(liked_posts)
