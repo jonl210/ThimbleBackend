@@ -10,6 +10,7 @@ from .serializers import CreateGroupSerializer
 from users.serializers import BasicProfileSerializer, ResultProfileSerializer
 
 from posts import PostsHelper
+from posts.models import Post
 
 from notifications.signals import notify
 from notifications.models import Notification
@@ -23,6 +24,13 @@ def create_group(request):
 
         # Add creator as a member
         group.members.add(Profile.objects.get(user=request.user))
+
+        if request.data.get("photo", None) != None:
+            photo_u_id = Post.generate_post_id()
+            photo_url = PostsHelper.upload_photo(request.data["photo"], photo_u_id)
+            group.banner = photo_url
+            group.save()
+
         return Response(status=status.HTTP_201_CREATED)
     else:
         return Response(group_serializer.errors)
@@ -79,7 +87,6 @@ def posts(request, u_id):
     posts = []
     for post in group_posts:
         posts.append(PostsHelper.set_like_status(post, profile))
-
     return Response(posts)
 
 # Return current members in a group

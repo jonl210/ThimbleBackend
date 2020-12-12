@@ -9,8 +9,9 @@ class Group(models.Model):
     u_id = models.CharField(max_length=10)
     creator = models.ForeignKey('users.profile', on_delete=models.PROTECT, related_name="groups")
     date = models.DateTimeField(default=datetime.now)
-    banner = models.URLField(default="replace")
+    banner = models.URLField(blank=True)
     members = models.ManyToManyField('users.profile', related_name="joined_groups")
+    description = models.CharField(max_length=150, blank=True)
 
     def generate_group_id(self):
         unique = False
