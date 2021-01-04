@@ -123,7 +123,7 @@ def feed(request):
     posts = []
     for count in range(feed_length):
         post = Post.objects.get(u_id=profile.feed[count])
-        posts.append(PostsHelper.set_like_status(post, profile))
+        posts.append(PostsHelper.prepare_post(post, profile))
     return Response(posts)
 
 # Return users likes

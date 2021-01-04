@@ -86,7 +86,7 @@ def posts(request, u_id):
     profile = Profile.objects.get(user=request.user)
     posts = []
     for post in group_posts:
-        posts.append(PostsHelper.set_like_status(post, profile))
+        posts.append(PostsHelper.prepare_post(post, profile))
     return Response(posts)
 
 # Return current members in a group
