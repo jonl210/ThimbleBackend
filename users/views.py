@@ -65,12 +65,15 @@ def search(request, search_query):
 def groups(request, group_type):
     profile = Profile.objects.get(user=request.user)
     groups = 0
+    group_array = []
     if group_type == "created":
         groups = profile.groups.all()
     elif group_type == "joined":
         groups = profile.joined_groups.all().exclude(creator=profile)
     groups_serializer = GroupSerializer(groups, many=True)
-    return Response(groups_serializer.data)
+    for group in groups:
+        group_array.append({"group": GroupSerializer(group).data, "posts": group.group_posts.all().count()})
+    return Response(group_array)
 
 # Return info for user profile
 @api_view(['GET', 'PUT'])
